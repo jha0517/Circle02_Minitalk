@@ -5,26 +5,32 @@
 #include "include/minitalk.h"
 #include <time.h>
 
-void print_bit(char octet, int id)
+void print_bit(char *octet, int id)
 {
 	int	shift = 0;
 	char	out;
 
-	while(shift < 8)
+	while(*octet)
 	{
-		out = ((octet >> shift) & 1) + '0';
-		if(out == '0')
-		{	kill(id, SIGUSR1);
-			printf("0");
+		shift = 0;
+		while(shift < 8)
+		{
+			out = ((*octet >> shift) & 1) + '0';
+			if(out == '0')
+			{	kill(id, SIGUSR1);
+				printf("0");
+			}
+			if(out == '1')
+			{	kill(id, SIGUSR2);
+				printf("1");
+			}
+			shift++;
+			usleep(100);
 		}
-		if(out == '1')
-		{	kill(id, SIGUSR2);
-			printf("1");
-		}
-		shift++;
+		octet++;
 	}
-	write(1, "\n", 1);
 }
+
 void ft_binary_send(int server_id, char c)
 {
 	(void) server_id;
@@ -55,7 +61,7 @@ int main(int ac, char **av)
 	{	if (ft_str_is_numeric(av[1]))
 		{
 			id = ft_atoi(av[1]);
-			print_bit('a',id);
+			print_bit(av[2],id);
 			// ft_send_message(id, av[2]);
 		}
 		else
