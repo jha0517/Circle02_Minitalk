@@ -1,41 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/25 12:26:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/03 14:15:05 by hyujung          ###   ########.fr       */
+/*   Created: 2021/12/09 21:23:10 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/03 14:15:12 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-char	*ft_strnstr(const char *str, const char *to_find, size_t n)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
+	char	*result;
 	size_t	i;
-	size_t	counter;
-	char	*s;
-	char	*t;
+	size_t	j;
 
-	s = (char *)str;
-	t = (char *)to_find;
-	if (!*t)
-		return ((char *)s);
-	i = 0;
-	while (s[i] && i < n)
+	if (!s)
+		return (NULL);
+	if (!len || (ft_strlen(s) <= start))
+		return (ft_strdup(""));
+	if (len > ft_strlen(s))
+		len = ft_strlen(s);
+	result = (char *)malloc(sizeof(char) * (len + 1));
+	if (!result)
+		return (NULL);
+	i = -1;
+	j = 0;
+	while (s[++i] && (j < len))
 	{
-		counter = 0;
-		while (((i + counter) < n) && (s[i + counter] == t[counter]))
-		{
-			if (t[counter + 1] == '\0')
-			{
-				return ((char *)&s[i]);
-			}
-			counter++;
-		}
-		i++;
+		if (i >= start)
+			result[j++] = s[i];
 	}
-	return (0);
+	result[j] = 0;
+	return (result);
 }

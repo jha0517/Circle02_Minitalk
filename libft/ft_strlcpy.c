@@ -1,41 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/25 12:26:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/03 14:15:05 by hyujung          ###   ########.fr       */
+/*   Created: 2021/11/25 12:32:52 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/03 14:14:55 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-char	*ft_strnstr(const char *str, const char *to_find, size_t n)
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	size_t	i;
-	size_t	counter;
-	char	*s;
-	char	*t;
+	unsigned int	offset;
+	unsigned int	len;
 
-	s = (char *)str;
-	t = (char *)to_find;
-	if (!*t)
-		return ((char *)s);
-	i = 0;
-	while (s[i] && i < n)
+	offset = 0;
+	if (!dstsize)
+		return (ft_strlen(src));
+	len = ft_strlen(src);
+	if (dstsize > 0)
 	{
-		counter = 0;
-		while (((i + counter) < n) && (s[i + counter] == t[counter]))
+		while (*(src + offset) != '\0' && offset < dstsize - 1)
 		{
-			if (t[counter + 1] == '\0')
-			{
-				return ((char *)&s[i]);
-			}
-			counter++;
+			*(dst + offset) = *(src + offset);
+			offset++;
 		}
-		i++;
 	}
-	return (0);
+	*(dst + offset) = '\0';
+	while (*(src + offset) != '\0')
+		offset++;
+	return (len);
 }

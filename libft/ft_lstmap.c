@@ -1,41 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/25 12:26:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/03 14:15:05 by hyujung          ###   ########.fr       */
+/*   Created: 2021/12/11 20:14:46 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/03 14:14:06 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-char	*ft_strnstr(const char *str, const char *to_find, size_t n)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	size_t	i;
-	size_t	counter;
-	char	*s;
-	char	*t;
+	t_list	*new;
+	t_list	*begin;
+	t_list	*tmp;
 
-	s = (char *)str;
-	t = (char *)to_find;
-	if (!*t)
-		return ((char *)s);
-	i = 0;
-	while (s[i] && i < n)
+	if (lst)
 	{
-		counter = 0;
-		while (((i + counter) < n) && (s[i + counter] == t[counter]))
+		tmp = lst;
+		begin = ft_lstnew(f(tmp->content));
+		if (!begin)
+			return (NULL);
+		tmp = tmp->next;
+		while (tmp)
 		{
-			if (t[counter + 1] == '\0')
+			new = ft_lstnew(f(tmp->content));
+			if (!new)
 			{
-				return ((char *)&s[i]);
+				ft_lstclear(&begin, del);
+				return (NULL);
 			}
-			counter++;
+			ft_lstadd_back(&begin, new);
+			tmp = tmp->next;
 		}
-		i++;
+		return (begin);
 	}
-	return (0);
+	return (NULL);
 }

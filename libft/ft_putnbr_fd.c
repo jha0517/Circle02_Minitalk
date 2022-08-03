@@ -1,41 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/25 12:26:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/03 14:15:05 by hyujung          ###   ########.fr       */
+/*   Created: 2021/12/11 20:08:15 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/03 13:14:30 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-char	*ft_strnstr(const char *str, const char *to_find, size_t n)
+void	ft_putnbr_fd(int nb, int fd)
 {
-	size_t	i;
-	size_t	counter;
-	char	*s;
-	char	*t;
-
-	s = (char *)str;
-	t = (char *)to_find;
-	if (!*t)
-		return ((char *)s);
-	i = 0;
-	while (s[i] && i < n)
+	if (nb == -2147483648)
+		ft_putstr_fd("-2147483648", fd);
+	else
 	{
-		counter = 0;
-		while (((i + counter) < n) && (s[i + counter] == t[counter]))
+		if (nb < 0)
 		{
-			if (t[counter + 1] == '\0')
-			{
-				return ((char *)&s[i]);
-			}
-			counter++;
+			nb = -nb;
+			ft_putchar_fd('-', fd);
 		}
-		i++;
+		if (nb >= 10)
+		{
+			ft_putnbr_fd(nb / 10, fd);
+			ft_putnbr_fd(nb % 10, fd);
+		}
+		if (nb < 10)
+			ft_putchar_fd(nb + 48, fd);
 	}
-	return (0);
 }

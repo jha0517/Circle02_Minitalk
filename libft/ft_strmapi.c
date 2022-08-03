@@ -1,41 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/25 12:26:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/03 14:15:05 by hyujung          ###   ########.fr       */
+/*   Created: 2021/12/11 20:04:58 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/03 14:15:01 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-char	*ft_strnstr(const char *str, const char *to_find, size_t n)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	size_t	i;
-	size_t	counter;
-	char	*s;
-	char	*t;
+	char			(**ptr)(unsigned int, char);
+	char			*result;
+	unsigned int	i;
 
-	s = (char *)str;
-	t = (char *)to_find;
-	if (!*t)
-		return ((char *)s);
+	ptr = &f;
 	i = 0;
-	while (s[i] && i < n)
+	if (!s || !f)
+		return (NULL);
+	result = (char *)malloc(sizeof(char) * ft_strlen(s) + 1);
+	if (!result)
+		return (NULL);
+	while (s[i])
 	{
-		counter = 0;
-		while (((i + counter) < n) && (s[i + counter] == t[counter]))
-		{
-			if (t[counter + 1] == '\0')
-			{
-				return ((char *)&s[i]);
-			}
-			counter++;
-		}
+		result[i] = (*ptr)(i, s[i]);
 		i++;
 	}
-	return (0);
+	result[i] = '\0';
+	return (result);
 }

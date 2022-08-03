@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strlcp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hyujung <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/11 19:36:58 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/03 14:14:58 by hyujung          ###   ########.fr       */
+/*   Created: 2021/11/25 12:32:52 by hyujung           #+#    #+#             */
+/*   Updated: 2021/11/25 12:34:58 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
-
-size_t	ft_strlen(const char *str)
+char	*ft_strncpy(char *dest, char *src, unsigned int n)
 {
-	int	i;
+	unsigned int	i;
 
 	i = 0;
-	while (str[i])
+	while (i < n)
+	{
+		if (*src)
+		{
+			*(dest + i) = *src;
+			src++;
+		}
+		else if (!*src)
+			*(dest + i) = '\0';
 		i++;
-	return (i);
+	}
+	return (dest);
 }

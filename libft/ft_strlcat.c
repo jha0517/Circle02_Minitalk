@@ -1,41 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/25 12:26:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/03 14:15:05 by hyujung          ###   ########.fr       */
+/*   Created: 2021/11/25 12:35:13 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/03 14:14:50 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-char	*ft_strnstr(const char *str, const char *to_find, size_t n)
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
-	size_t	i;
-	size_t	counter;
-	char	*s;
-	char	*t;
+	unsigned int	i;
+	unsigned int	dest_len;
+	unsigned int	src_len;
 
-	s = (char *)str;
-	t = (char *)to_find;
-	if (!*t)
-		return ((char *)s);
 	i = 0;
-	while (s[i] && i < n)
+	dest_len = ft_strlen(dst);
+	src_len = ft_strlen(src);
+	if (dest_len >= dstsize || dstsize == 0)
+		return (dstsize + src_len);
+	while (src[i] && ((i + dest_len) < (dstsize - 1)))
 	{
-		counter = 0;
-		while (((i + counter) < n) && (s[i + counter] == t[counter]))
-		{
-			if (t[counter + 1] == '\0')
-			{
-				return ((char *)&s[i]);
-			}
-			counter++;
-		}
+		dst[i + dest_len] = src[i];
 		i++;
 	}
-	return (0);
+	if (i + dest_len < dstsize)
+	{
+		dst[i + dest_len] = '\0';
+	}
+	return (src_len + dest_len);
 }

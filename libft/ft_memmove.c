@@ -1,41 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/25 12:26:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/03 14:15:05 by hyujung          ###   ########.fr       */
+/*   Created: 2021/12/11 19:41:47 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/03 14:14:19 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/libft.h"
 
-char	*ft_strnstr(const char *str, const char *to_find, size_t n)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	size_t	i;
-	size_t	counter;
-	char	*s;
-	char	*t;
+	unsigned char	*d;
+	unsigned char	*s;
+	size_t			i;
 
-	s = (char *)str;
-	t = (char *)to_find;
-	if (!*t)
-		return ((char *)s);
 	i = 0;
-	while (s[i] && i < n)
+	d = (unsigned char *) dst;
+	s = (unsigned char *) src;
+	if (!s && !d)
+		return ("\0");
+	if (d > s)
 	{
-		counter = 0;
-		while (((i + counter) < n) && (s[i + counter] == t[counter]))
+		while (len--)
 		{
-			if (t[counter + 1] == '\0')
-			{
-				return ((char *)&s[i]);
-			}
-			counter++;
+			d[len] = s[len];
 		}
-		i++;
 	}
-	return (0);
+	else
+	{
+		while (i < len)
+		{
+			d[i] = s[i];
+			i++;
+		}
+	}
+	return ((void *)d);
 }
