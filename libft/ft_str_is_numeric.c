@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_str_is_numeric.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 14:44:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/04 15:17:39 by hyujung          ###   ########.fr       */
+/*   Created: 2022/08/04 14:59:33 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/04 15:19:34 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "../include/minitalk.h"
 
-typedef struct s_minitalk
+int	ft_str_is_numeric(char *str)
 {
-	char	*msg;
-	int		end_of_line;
-}	t_minitalk;
-
-int	ft_str_is_numeric(char *str);
-
-#endif
+	while (*str)
+	{
+		if (!((*str >= 48 && *str <= 57)))
+			return (0);
+		++str;
+	}
+	return (1);
+}

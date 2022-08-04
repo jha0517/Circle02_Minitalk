@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_initialize_tab.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 14:44:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/04 15:17:39 by hyujung          ###   ########.fr       */
+/*   Created: 2022/01/18 16:08:51 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/04 15:28:31 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "../include/ft_printf.h"
+#include "../include/libft.h"
 
-typedef struct s_minitalk
+t_print	*ft_initialize_tab(t_print *tab)
 {
-	char	*msg;
-	int		end_of_line;
-}	t_minitalk;
-
-int	ft_str_is_numeric(char *str);
-
-#endif
+	tab->perc = 0;
+	return (tab);
+}

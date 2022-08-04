@@ -1,73 +1,102 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/04 14:44:52 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/04 16:24:15 by hyujung          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <signal.h>
 #include <unistd.h>
 #include <stdio.h>
 #include "include/libft.h"
 #include "include/minitalk.h"
-#include <time.h>
+#include "include/ft_printf.h"
 
-// int is_ready = 1;
+t_minitalk	g_talkinfo;
 
-// void	ft_received(int sig)
-// {
-// 	if (sig == SIGUSR1)
-// 	{
-// 		printf(" ");
-// 	}
-// 	return ;
-// }
-void ft_send_byte(int id, char c)
+void	ft_end_of_line(int i)
 {
-	int	shift;
-	
-	shift = 8;
-	while(shift >= 0)
+	ft_printf("Received : %i letters\n", (i / 8));
+	i = 0;
+	g_talkinfo.end_of_line = 1;
+	exit(0);
+}
+
+void	ft_send_next_binary(int sig, siginfo_t *theinfo, void *foo)
+{
+	static int	i = 0;
+	char		c;
+
+	(void) foo;
+	c = g_talkinfo.msg[i / 8];
+	if (sig == SIGUSR1)
 	{
-		if (((c >> shift) & 1) == 0)
+		i += 1;
+		c = g_talkinfo.msg[i / 8];
+		if (!c && g_talkinfo.end_of_line == 1)
+			ft_end_of_line(i);
+		else
 		{
-			// printf("0");
-			kill(id, SIGUSR1);
-			// pause();
-			// usleep(100);
+			if (((c >> (7 - (i % 8))) & 1) == 0)
+				kill(theinfo->si_pid, SIGUSR1);
+			else if (((c >> (7 - (i % 8))) & 1) == 1)
+				kill(theinfo->si_pid, SIGUSR2);
 		}
-		else if (((c >> shift) & 1) == 1)
-		{
-			// printf("1");
-			kill(id, SIGUSR2);
-			// pause();
-			// usleep(100);
-		}
-		shift--;
 		usleep(200);
 	}
+	else if (sig == SIGUSR2)
+		ft_end_of_line(i);
+	return ;
 }
 
-void iterate_string(char *octet, int id)
+void	ft_send_first_binary(int server_pid)
 {
-	clock_t start = clock();
-	while(*octet)
+	char	c;
+
+	c = g_talkinfo.msg[0];
+	if ((c >> 7 & 1) == 0)
+		kill(server_pid, SIGUSR1);
+	else if ((c >> 7 & 1) == 1)
+		kill(server_pid, SIGUSR2);
+}
+
+int	ft_arg_error_check(int ac, char **av)
+{
+	if (ac != 3 || !ft_str_is_numeric(av[1]))
 	{
-		ft_send_byte(id, *octet);
-		octet++;
-		// printf("\n");
-		usleep(50);
+		ft_printf("INPUT ERROR : ./client [server id] [message]\n");
+		return (0);
 	}
-	clock_t end = clock();
-	printf("sec vitesse : %lf\n", (double)(end - start)/CLOCKS_PER_SEC);
+	if (!av[2][0])
+		return (0);
+	g_talkinfo.msg = av[2];
+	return (1);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	int	id;;
+	struct sigaction	client_sa;
 
-	// signal(SIGUSR1, &ft_received);
-	if (ac == 3)
-	{	if (ft_str_is_numeric(av[1]))
-		{
-			id = ft_atoi(av[1]);
-			iterate_string(av[2],id);
-		}
-		else
-			printf("id must be an number.\n");
+	ft_memset(&client_sa, 0, sizeof(client_sa));
+	client_sa.sa_sigaction = ft_send_next_binary;
+	client_sa.sa_flags = SA_SIGINFO;
+	g_talkinfo.msg = NULL;
+	g_talkinfo.end_of_line = 0;
+	sigaction(SIGUSR1, &client_sa, NULL);
+	sigaction(SIGUSR2, &client_sa, NULL);
+	if (!ft_arg_error_check(ac, av))
+		return (0);
+	ft_send_first_binary(ft_atoi(av[1]));
+	while (1)
+	{
+		if (g_talkinfo.end_of_line == 1)
+			exit(0);
+		pause();
 	}
 	return (0);
 }

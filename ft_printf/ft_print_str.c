@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_print_str.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 14:44:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/04 15:17:39 by hyujung          ###   ########.fr       */
+/*   Created: 2022/02/01 20:21:44 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/04 15:29:17 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "../include/ft_printf.h"
+#include "../include/libft.h"
 
-typedef struct s_minitalk
+void	ft_print_str(t_print *tab)
 {
-	char	*msg;
-	int		end_of_line;
-}	t_minitalk;
+	char	*s;
+	int		len;
 
-int	ft_str_is_numeric(char *str);
-
-#endif
+	s = va_arg(tab->args, char *);
+	len = 0;
+	if (s == NULL)
+	{
+		s = "(null)";
+		len = 6;
+	}
+	else
+		len = ft_strlen(s);
+	ft_putstr_fd(s, 1);
+	tab->nprinted += len;
+}

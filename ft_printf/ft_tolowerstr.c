@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_tolowerstr.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 14:44:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/04 15:17:39 by hyujung          ###   ########.fr       */
+/*   Created: 2022/02/01 20:41:05 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/04 15:29:24 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "../include/libft.h"
 
-typedef struct s_minitalk
+char	*ft_tolowerstr(char *str)
 {
-	char	*msg;
-	int		end_of_line;
-}	t_minitalk;
+	char	*str2;
+	int		i;
 
-int	ft_str_is_numeric(char *str);
-
-#endif
+	i = 0;
+	str2 = malloc(sizeof(char) * ft_strlen(str) +1);
+	while (*str)
+	{
+		if (*str >= 'A' && *str <= 'Z')
+		{
+			str2[i] = *str + 32;
+		}
+		else
+			str2[i] = *str;
+		str++;
+		i++;
+	}
+	str2[i] = '\0';
+	return (str2);
+}

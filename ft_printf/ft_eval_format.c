@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   ft_eval_format.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/04 14:44:50 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/04 15:17:39 by hyujung          ###   ########.fr       */
+/*   Created: 2022/02/01 19:55:03 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/04 15:28:25 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "../include/ft_printf.h"
+#include "../include/libft.h"
 
-typedef struct s_minitalk
+int	ft_eval_format(t_print *tab, const char *str, int pos)
 {
-	char	*msg;
-	int		end_of_line;
-}	t_minitalk;
-
-int	ft_str_is_numeric(char *str);
-
-#endif
+	if (ft_strchr(ENDSYMBOL, str[pos]))
+	{
+		pos = ft_convert_indicator(tab, str, pos);
+		ft_initialize_tab(tab);
+		return (pos);
+	}
+	return (pos);
+}
