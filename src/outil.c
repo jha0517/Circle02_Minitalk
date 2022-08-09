@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcp.c                                        :+:      :+:    :+:   */
+/*   outil.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/25 12:32:52 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/09 09:12:35 by hyujung          ###   ########.fr       */
+/*   Created: 2022/08/08 14:18:50 by hyujung           #+#    #+#             */
+/*   Updated: 2022/08/09 11:56:42 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strncpy(char *dest, char *src, unsigned int n)
-{
-	unsigned int	i;
+#include "../include/minitalk.h"
+#include "../include/libft.h"
+#include <signal.h>
 
-	i = 0;
-	while (i < n)
-	{
-		if (*src)
-		{
-			*(dest + i) = *src;
-			src++;
-		}
-		else if (!*src)
-			*(dest + i) = '\0';
-		i++;
-	}
-	return (dest);
+int	ft_signal(int id, char c)
+{
+	int	is_sent;
+
+	is_sent = 0;
+	if (c == 0)
+		is_sent = kill(id, SIGUSR1);
+	else if (c == 1)
+		is_sent = kill(id, SIGUSR2);
+	return (is_sent);
 }
