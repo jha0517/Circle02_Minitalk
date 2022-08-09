@@ -6,7 +6,7 @@
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 14:44:55 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/09 11:58:40 by hyujung          ###   ########.fr       */
+/*   Updated: 2022/08/09 12:20:10 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,13 @@ void	ft_message_handler(int sig, siginfo_t *theinfo, void *foo)
 
 	(void) foo;
 	is_sent = 0;
-	code = code << 1;
+	if (sig == SIGUSR1)
+		code = code << 1;
 	if (sig == SIGUSR2)
+	{
+		code = code << 1;
 		code += 1;
+	}
 	count += 1;
 	// printf("count : %i\n", count);
 	is_sent = kill(theinfo->si_pid, SIGUSR1);

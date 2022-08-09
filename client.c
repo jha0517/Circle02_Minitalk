@@ -6,7 +6,7 @@
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 14:44:52 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/09 12:02:12 by hyujung          ###   ########.fr       */
+/*   Updated: 2022/08/09 12:13:06 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,9 +143,9 @@ int	main(int ac, char **av)
 	client_sa.sa_flags = SA_SIGINFO;
 	g_talkinfo.msg = NULL;
 	g_talkinfo.end_of_line = 0;
-	// sigemptyset(&client_sa.sa_mask);
-	// sigaddset(&client_sa.sa_mask, SIGUSR1);
-	// sigaddset(&client_sa.sa_mask, SIGUSR2);
+	sigemptyset(&client_sa.sa_mask);
+	sigaddset(&client_sa.sa_mask, SIGUSR1);
+	sigaddset(&client_sa.sa_mask, SIGUSR2);
 	sigaction(SIGUSR1, &client_sa, NULL);
 	sigaction(SIGUSR2, &client_sa, NULL);
 	if (!ft_arg_error_check(ac, av))
