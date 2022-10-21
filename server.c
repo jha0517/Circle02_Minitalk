@@ -6,7 +6,7 @@
 /*   By: hyujung <hyujung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 14:44:55 by hyujung           #+#    #+#             */
-/*   Updated: 2022/08/09 12:20:10 by hyujung          ###   ########.fr       */
+/*   Updated: 2022/08/12 16:00:09 by hyujung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,35 @@
 
 t_minitalk	g_talkinfo;
 
-char *ft_append_char(char code)
+char	*ft_realloc(char *old_string, int len)
 {
 	char	*new_string;
-	int		i;
-	// int		len;
+
+	new_string = (char *)malloc(sizeof(char) * len);
+	if (!new_string)
+		return (NULL);
+	new_string = ft_strncpy(new_string, old_string, len);
+	free(old_string);
+	return (new_string);
+}
+
+char	*ft_append_char(char code)
+{
+	char	*new_string;
+	int		len;
 	char	*old_string;
 
 	old_string = g_talkinfo.msg;
-	// printf("mystring : %s\n", old_string);
 	if (!old_string)
 	{
-		// printf("===========");
-		new_string = (char *)malloc(sizeof(char) * 2);
+		new_string = (char *)ft_calloc(2, sizeof(char));
 		new_string[0] = code;
-		new_string[1] = '\0';
-		// printf("===========");
 		return (new_string);
 	}
-	// printf("code : %c\n", code);
-	// printf("len : %zu\n", (ft_strlen(old_string)));
-	i = (ft_strlen(old_string));
-	new_string = (char *)malloc(sizeof(char) * ((ft_strlen(old_string)) + 2));
-	if(!new_string)
-		return (NULL);
-	new_string = ft_strncpy(new_string, old_string, ft_strlen(old_string));
-	// printf("after copy string is : %s\n", new_string);
-	new_string[i] = code;
-	new_string[i + 1] = '\0';
-	// printf("add code string is : %s\n", new_string);
-	// free(g_talkinfo.msg);
-	g_talkinfo.msg = new_string;
+	len = (ft_strlen(old_string));
+	new_string = ft_realloc(old_string, (len + 2));
+	new_string[len] = code;
+	new_string[len + 1] = '\0';
 	return (new_string);
 }
 
@@ -54,15 +52,12 @@ int	ft_malloc_char_and_send_signal(int id, char code)
 
 	is_sent = 0;
 	if (code)
-	{	g_talkinfo.msg = ft_append_char(code);
-		// printf("updated g_talkinfo.msg : %s\n", g_talkinfo.msg);
-	}
+		g_talkinfo.msg = ft_append_char(code);
 	else if (code == '\0')
 	{
-		// printf("end of string: %c\n", code);
-		// g_talkinfo.msg = ft_append_char('\n');
 		ft_printf("%s\n", g_talkinfo.msg);
 		is_sent = kill(id, SIGUSR2);
+		free(g_talkinfo.msg);
 		g_talkinfo.msg = NULL;
 	}
 	return (is_sent);
@@ -76,24 +71,21 @@ void	ft_message_handler(int sig, siginfo_t *theinfo, void *foo)
 
 	(void) foo;
 	is_sent = 0;
-	if (sig == SIGUSR1)
-		code = code << 1;
+	code = code << 1;
 	if (sig == SIGUSR2)
-	{
-		code = code << 1;
 		code += 1;
-	}
 	count += 1;
-	// printf("count : %i\n", count);
 	is_sent = kill(theinfo->si_pid, SIGUSR1);
 	if (count % 8 == 0)
 	{
 		is_sent = ft_malloc_char_and_send_signal(theinfo->si_pid, code);
-		if (is_sent == -1)
-			return ;
-		// ft_printf("%c", code);
 		code = 0;
 		count = 0;
+	}
+	if (is_sent == -1)
+	{
+		ft_printf("Signal failed\n");
+		exit (0);
 	}
 	return ;
 }
@@ -106,7 +98,6 @@ int	main(void)
 
 	id = getpid();
 	ft_memset(&sa, 0, sizeof(sa));
-	
 	g_talkinfo.msg = NULL;
 	sigemptyset(&sa.sa_mask);
 	sigaddset(&sa.sa_mask, SIGUSR1);
