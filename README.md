@@ -18,15 +18,11 @@ Once the client is connected to the server, you can start sending and receiving 
 
 MiniTalk includes the following features:
 
-- Multi-client support
-- Message broadcasting to all clients
-- User nickname customization
-- Basic error handling
-- Graceful program termination
+- Sending string from client to host.
 
 ## Authors
 
-MiniTalk was created by [author 1] and [author 2]. If you have any questions or feedback, please feel free to contact us.
+MiniTalk was created by Hyunah. If you have any questions or feedback, please feel free to contact us.
 
 ## Acknowledgements
 
