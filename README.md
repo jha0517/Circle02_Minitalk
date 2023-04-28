@@ -2,6 +2,8 @@
 
 MiniTalk is a project for 42 school that aims to create a simple chat application using TCP/IP sockets. The program allows users to send and receive messages between multiple clients connected to a server.
 
+![](image.png)
+
 ## Getting Started
 
 To start using MiniTalk, you need to clone the repository from the 42 school GitLab. Once you have the source code, compile it using the make command. After compiling, you can run the server and client programs.
